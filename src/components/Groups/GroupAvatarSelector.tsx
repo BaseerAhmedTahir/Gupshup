@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Check, Users } from 'lucide-react';
+import { Check } from 'lucide-react';
 
 interface GroupAvatarSelectorProps {
   selectedAvatar: string;
