@@ -37,7 +37,6 @@ const Layout: React.FC = () => {
               <div className="w-24 h-24 mx-auto mb-6 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-full flex items-center justify-center">
                 <MessageCircle className="w-12 h-12 text-blue-600" />
               </div>
-              <h3 className="text-2xl font-bold text-gray-800 mb-3">Welcome to ChatApp</h3>
               <h3 className="text-2xl font-bold text-gray-800 mb-3">Welcome to Gupshup</h3>
               <p className="text-gray-500 text-lg">Select a contact or group to start chatting</p>
               <div className="mt-8 flex justify-center space-x-4">
