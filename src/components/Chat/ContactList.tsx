@@ -225,14 +225,14 @@ const ContactList: React.FC<ContactListProps> = ({
                         e.stopPropagation();
                         setShowUserProfile(contact.id);
                       }}
-                      className="text-gray-400 hover:text-blue-600 transition-colors hover-lift"
+                      className="text-gray-400 hover:text-blue-600 transition-colors hover-lift flex-shrink-0"
                       title="View Profile"
                     >
                       <User className="w-3 h-3" />
                     </button>
                   </div>
                   {contact.lastMessage && (
-                    <span className="text-xs text-gray-500">
+                    <span className="text-xs text-gray-500 flex-shrink-0">
                       {formatDistanceToNow(new Date(contact.lastMessage.timestamp))} ago
                     </span>
                   )}
@@ -242,7 +242,7 @@ const ContactList: React.FC<ContactListProps> = ({
                     {contact.lastMessage?.content || (contact.display_name ? contact.email : getStatusText(contact))}
                   </p>
                   {contact.unreadCount && contact.unreadCount > 0 && (
-                    <span className="inline-flex items-center justify-center px-2 py-1 mr-2 text-xs font-bold leading-none text-white bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full shadow-md">
+                    <span className="inline-flex items-center justify-center px-2 py-1 ml-2 text-xs font-bold leading-none text-white bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full shadow-md flex-shrink-0">
                       {contact.unreadCount}
                     </span>
                   )}
