@@ -577,7 +577,7 @@ const GroupChatWindow: React.FC<GroupChatWindowProps> = ({ groupId }) => {
       <div className="flex items-center justify-between p-4 border-b border-gray-200 bg-gradient-to-r from-white to-gray-50 shadow-sm">
         <div className="flex items-center">
           <div className="relative">
-            <div className="w-10 h-10 rounded-full overflow-hidden bg-gradient-to-br from-purple-100 to-indigo-200 flex items-center justify-center shadow-md">
+            <div className="w-8 h-8 lg:w-10 lg:h-10 rounded-full overflow-hidden bg-gradient-to-br from-purple-100 to-indigo-200 flex items-center justify-center shadow-md">
               {group.avatar_url ? (
                 <img
                   src={group.avatar_url}
@@ -585,44 +585,44 @@ const GroupChatWindow: React.FC<GroupChatWindowProps> = ({ groupId }) => {
                   className="w-full h-full object-cover border-2 border-white"
                 />
               ) : (
-                <Users className="w-5 h-5 text-purple-600" />
+                <Users className="w-4 h-4 lg:w-5 lg:h-5 text-purple-600" />
               )}
             </div>
           </div>
-          <div className="ml-3">
-            <h3 className="text-lg font-semibold text-gray-900">{group.name}</h3>
-            <p className="text-sm text-gray-500 font-medium">
+          <div className="ml-3 min-w-0 flex-1">
+            <h3 className="text-base lg:text-lg font-semibold text-gray-900 truncate">{group.name}</h3>
+            <p className="text-xs lg:text-sm text-gray-500 font-medium">
               {members.length} member{members.length !== 1 ? 's' : ''}
             </p>
           </div>
         </div>
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-1 lg:space-x-2">
           <button 
             onClick={() => setShowAddMember(true)}
-            className="p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all hover-lift"
+            className="p-1.5 lg:p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all hover-lift"
             title="Add Members"
           >
-            <UserPlus className="w-5 h-5" />
+            <UserPlus className="w-4 h-4 lg:w-5 lg:h-5" />
           </button>
           <button 
             onClick={showCallFeatureMessage}
-            className="p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all hover-lift"
+            className="p-1.5 lg:p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all hover-lift"
           >
-            <Phone className="w-5 h-5" />
+            <Phone className="w-4 h-4 lg:w-5 lg:h-5" />
           </button>
           <button 
             onClick={showCallFeatureMessage}
-            className="p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all hover-lift"
+            className="p-1.5 lg:p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all hover-lift"
           >
-            <Video className="w-5 h-5" />
+            <Video className="w-4 h-4 lg:w-5 lg:h-5" />
           </button>
           <div className="relative">
             <button 
               onClick={() => setShowGroupMenu(!showGroupMenu)}
-              className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-all hover-lift"
+              className="p-1.5 lg:p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-all hover-lift"
               title="Group Options"
             >
-              <MoreVertical className="w-5 h-5" />
+              <MoreVertical className="w-4 h-4 lg:w-5 lg:h-5" />
             </button>
             
             {showGroupMenu && (
