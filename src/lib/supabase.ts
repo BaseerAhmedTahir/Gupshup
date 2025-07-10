@@ -20,6 +20,7 @@ export type Database = {
           status: 'online' | 'offline' | 'away';
           last_active: string;
           created_at: string;
+          avatar_url?: string;
         };
         Insert: {
           id: string;
@@ -28,6 +29,7 @@ export type Database = {
           status?: 'online' | 'offline' | 'away';
           last_active?: string;
           created_at?: string;
+          avatar_url?: string;
         };
         Update: {
           id?: string;
@@ -36,6 +38,7 @@ export type Database = {
           status?: 'online' | 'offline' | 'away';
           last_active?: string;
           created_at?: string;
+          avatar_url?: string;
         };
       };
       connections: {
