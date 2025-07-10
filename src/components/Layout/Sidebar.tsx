@@ -125,11 +125,11 @@ const Sidebar: React.FC<SidebarProps> = ({
   };
 
   return (
-    <div className="w-full lg:w-80 bg-white border-r border-gray-200 flex flex-col h-full">
+    <div className="w-full bg-white border-r border-gray-200 flex flex-col h-full">
       {/* Header */}
       <div className="p-4 border-b border-gray-200">
         <div className="flex items-center justify-between mb-4">
-          <h1 className="text-xl font-semibold text-gray-900">Gupshup</h1>
+          <h1 className="text-xl lg:text-xl font-semibold text-gray-900">Gupshup</h1>
           <div className="flex items-center space-x-2">
             <button
               onClick={() => setShowNotificationsModal(true)}
@@ -161,7 +161,7 @@ const Sidebar: React.FC<SidebarProps> = ({
             placeholder="Search conversations..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full pl-10 pr-4 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           />
         </div>
       </div>
@@ -173,14 +173,14 @@ const Sidebar: React.FC<SidebarProps> = ({
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id as 'chats' | 'contacts' | 'groups')}
-              className={`flex-1 flex items-center justify-center py-3 px-4 text-sm font-medium transition-colors relative ${
+              className={`flex-1 flex items-center justify-center py-3 px-2 text-xs lg:text-sm font-medium transition-colors relative ${
                 activeTab === tab.id
                   ? 'text-blue-600 border-b-2 border-blue-600'
                   : 'text-gray-600 hover:text-gray-900'
               }`}
             >
-              <tab.icon className="w-4 h-4 mr-2" />
-              {tab.label}
+              <tab.icon className="w-4 h-4 lg:mr-2" />
+              <span className="hidden lg:inline">{tab.label}</span>
             </button>
           ))}
         </div>
@@ -190,10 +190,15 @@ const Sidebar: React.FC<SidebarProps> = ({
           <div className="px-4 py-2 border-t border-gray-100 bg-gray-50">
             <button
               onClick={handleAddAction}
-              className="w-full flex items-center justify-center py-2 px-4 text-sm font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-colors"
+              className="w-full flex items-center justify-center py-2 px-4 text-xs lg:text-sm font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-colors"
             >
-              <UserPlus className="w-4 h-4 mr-2" />
-              {activeTab === 'groups' ? 'Create New Group' : 'Add New Contact'}
+              <UserPlus className="w-4 h-4 lg:mr-2" />
+              <span className="hidden lg:inline">
+                {activeTab === 'groups' ? 'Create New Group' : 'Add New Contact'}
+              </span>
+              <span className="lg:hidden">
+                {activeTab === 'groups' ? 'New Group' : 'Add Contact'}
+              </span>
             </button>
           </div>
         )}
@@ -272,7 +277,7 @@ const Sidebar: React.FC<SidebarProps> = ({
           className="flex items-center cursor-pointer hover:bg-gray-50 rounded-lg p-2 -m-2"
           onClick={() => setShowProfile(true)}
         >
-          <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+          <div className="w-8 h-8 lg:w-10 lg:h-10 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
             {user?.user_metadata?.avatar_url ? (
               <img
                 src={user.user_metadata.avatar_url}
@@ -280,13 +285,13 @@ const Sidebar: React.FC<SidebarProps> = ({
                 className="w-full h-full rounded-full object-cover"
               />
             ) : (
-              <span className="text-sm font-semibold text-blue-600">
+              <span className="text-xs lg:text-sm font-semibold text-blue-600">
                 {user?.user_metadata?.display_name?.charAt(0).toUpperCase() || user?.email?.charAt(0).toUpperCase()}
               </span>
             )}
           </div>
-          <div className="ml-3 flex-1">
-            <p className="text-sm font-medium text-gray-900">
+          <div className="ml-3 flex-1 min-w-0">
+            <p className="text-sm font-medium text-gray-900 truncate">
               {user?.user_metadata?.display_name || user?.email}
             </p>
             <p className="text-xs text-green-600">Online</p>
