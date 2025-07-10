@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Settings, Save, Loader2, Users } from 'lucide-react';
+import { X, Settings, Save, Loader2 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { supabase } from '../../lib/supabase';
 import GroupAvatarSelector from './GroupAvatarSelector';
