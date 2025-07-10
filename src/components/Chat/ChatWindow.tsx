@@ -501,10 +501,10 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ contactId }) => {
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b border-gray-200 bg-gradient-to-r from-white to-gray-50 shadow-sm">
         <div 
-          className="flex items-center cursor-pointer hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 rounded-lg p-2 -m-2 transition-all hover-lift"
+          className="flex items-center cursor-pointer hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 rounded-lg p-2 -m-2 transition-all hover-lift flex-1 min-w-0"
           onClick={() => setShowUserProfile(true)}
         >
-          <div className="w-10 h-10 bg-gradient-to-br from-gray-100 to-gray-200 rounded-full flex items-center justify-center shadow-md">
+          <div className="w-8 h-8 lg:w-10 lg:h-10 bg-gradient-to-br from-gray-100 to-gray-200 rounded-full flex items-center justify-center shadow-md flex-shrink-0">
             {contact.avatar_url ? (
               <img
                 src={contact.avatar_url}
@@ -512,41 +512,41 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ contactId }) => {
                 className="w-full h-full rounded-full object-cover border-2 border-white"
               />
             ) : (
-              <span className="text-sm font-bold text-gray-600">
+              <span className="text-xs lg:text-sm font-bold text-gray-600">
                 {contact.email.charAt(0).toUpperCase()}
               </span>
             )}
           </div>
-          <div className="ml-3">
-            <h3 className="text-lg font-semibold text-gray-900">
+          <div className="ml-3 min-w-0 flex-1">
+            <h3 className="text-base lg:text-lg font-semibold text-gray-900 truncate">
               {contact.display_name || contact.email}
             </h3>
-            <p className="text-sm text-gray-500 font-medium">{getStatusText()}</p>
+            <p className="text-xs lg:text-sm text-gray-500 font-medium truncate">{getStatusText()}</p>
           </div>
-          <User className="w-4 h-4 ml-2 text-gray-400 hover:text-blue-600 transition-colors" />
+          <User className="w-4 h-4 ml-2 text-gray-400 hover:text-blue-600 transition-colors flex-shrink-0" />
         </div>
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-1 lg:space-x-2 ml-2">
           <button 
             onClick={showCallFeatureMessage}
-            className="p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all hover-lift"
+            className="p-1.5 lg:p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all hover-lift"
           >
-            <Phone className="w-5 h-5" />
+            <Phone className="w-4 h-4 lg:w-5 lg:h-5" />
           </button>
           <button 
             onClick={showCallFeatureMessage}
-            className="p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all hover-lift"
+            className="p-1.5 lg:p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all hover-lift"
           >
-            <Video className="w-5 h-5" />
+            <Video className="w-4 h-4 lg:w-5 lg:h-5" />
           </button>
           <button 
             onClick={handleClearConversation}
-            className="p-2 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all hover-lift"
+            className="p-1.5 lg:p-2 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all hover-lift"
             title="Clear conversation"
           >
-            <Trash2 className="w-5 h-5" />
+            <Trash2 className="w-4 h-4 lg:w-5 lg:h-5" />
           </button>
-          <button className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-all hover-lift">
-            <MoreVertical className="w-5 h-5" />
+          <button className="p-1.5 lg:p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-all hover-lift">
+            <MoreVertical className="w-4 h-4 lg:w-5 lg:h-5" />
           </button>
         </div>
       </div>
