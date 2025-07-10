@@ -38,9 +38,18 @@ interface ChatWindowProps {
   contactId: string;
 }
 
+interface Connection {
+  id: string;
+  requester_id: string;
+  receiver_id: string;
+  status: 'pending' | 'accepted' | 'rejected';
+  created_at: string;
+}
+
 const ChatWindow: React.FC<ChatWindowProps> = ({ contactId }) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [contact, setContact] = useState<Contact | null>(null);
+  const [connection, setConnection] = useState<Connection | null>(null);
   const [newMessage, setNewMessage] = useState('');
   const [sending, setSending] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
@@ -56,6 +65,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ contactId }) => {
     if (!user || !contactId) return;
 
     fetchContact();
+    fetchConnection();
     fetchMessages();
 
     // Subscribe to real-time messages
@@ -145,6 +155,23 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ contactId }) => {
     }
 
     setContact(data);
+  };
+
+  const fetchConnection = async () => {
+    if (!user) return;
+
+    const { data, error } = await supabase
+      .from('connections')
+      .select('*')
+      .or(`and(requester_id.eq.${user.id},receiver_id.eq.${contactId}),and(requester_id.eq.${contactId},receiver_id.eq.${user.id})`)
+      .single();
+
+    if (error && error.code !== 'PGRST116') { // PGRST116 is "not found" error
+      console.error('Error fetching connection:', error);
+      return;
+    }
+
+    setConnection(data);
   };
 
   const fetchMessages = async () => {
@@ -426,6 +453,33 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ contactId }) => {
     return `Last seen ${formatDistanceToNow(new Date(contact.last_active))} ago`;
   };
 
+  const getConnectionStatus = () => {
+    if (!connection) return 'not_connected';
+    return connection.status;
+  };
+
+  const isConnectionAccepted = () => {
+    return getConnectionStatus() === 'accepted';
+  };
+
+  const getConnectionMessage = () => {
+    const status = getConnectionStatus();
+    if (status === 'pending') {
+      if (connection?.requester_id === user?.id) {
+        return 'Connection request sent. Waiting for acceptance.';
+      } else {
+        return 'You have a pending connection request from this user.';
+      }
+    }
+    if (status === 'rejected') {
+      return 'Connection request was declined.';
+    }
+    if (status === 'not_connected') {
+      return 'You need to connect with this user to start messaging.';
+    }
+    return '';
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-full">
@@ -498,51 +552,80 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ contactId }) => {
       </div>
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gradient-to-b from-gray-50 to-white scrollbar-thin">
-        {messages.map((message) => (
-          <MessageBubble
-            key={message.id}
-            message={message}
-            isOwn={message.sender_id === user?.id}
-            onDelete={handleDeleteMessage}
-          />
-        ))}
-        
-        {otherUserTyping && (
-          <TypingIndicator username={contact.email} />
-        )}
-        
-        <div ref={messagesEndRef} />
-      </div>
+      {isConnectionAccepted() ? (
+        <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gradient-to-b from-gray-50 to-white scrollbar-thin">
+          {messages.map((message) => (
+            <MessageBubble
+              key={message.id}
+              message={message}
+              isOwn={message.sender_id === user?.id}
+              onDelete={handleDeleteMessage}
+            />
+          ))}
+          
+          {otherUserTyping && (
+            <TypingIndicator username={contact.email} />
+          )}
+          
+          <div ref={messagesEndRef} />
+        </div>
+      ) : (
+        <div className="flex-1 flex items-center justify-center bg-gradient-to-b from-gray-50 to-white">
+          <div className="text-center p-8 max-w-md">
+            <div className="w-16 h-16 bg-gradient-to-br from-gray-100 to-gray-200 rounded-full flex items-center justify-center mx-auto mb-4 shadow-md">
+              {contact.avatar_url ? (
+                <img
+                  src={contact.avatar_url}
+                  alt={contact.display_name || contact.email}
+                  className="w-full h-full rounded-full object-cover border-2 border-white"
+                />
+              ) : (
+                <span className="text-xl font-bold text-gray-600">
+                  {contact.email.charAt(0).toUpperCase()}
+                </span>
+              )}
+            </div>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              {contact.display_name || contact.email}
+            </h3>
+            <p className="text-gray-600 mb-4">{getConnectionMessage()}</p>
+            <p className="text-sm text-gray-500">
+              Connect with this user to start messaging.
+            </p>
+          </div>
+        </div>
+      )}
 
       {/* Message Input */}
-      <div className="p-4 border-t border-gray-200 bg-gradient-to-r from-white to-gray-50 shadow-sm">
-        <form onSubmit={handleSendMessage} className="flex items-center space-x-2">
-          <FileUpload onFileSelect={handleFileUpload} />
-          
-          <div className="flex-1 relative">
-            <input
-              type="text"
-              value={newMessage}
-              onChange={(e) => handleTyping(e.target.value)}
-              placeholder="Message..."
-              className="w-full px-4 py-3 border border-gray-300 rounded-full focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white shadow-sm transition-all"
-              disabled={sending}
-            />
-            <div className="absolute right-2 top-1/2 transform -translate-y-1/2">
-              <EmojiPicker onEmojiSelect={handleEmojiSelect} />
+      {isConnectionAccepted() && (
+        <div className="p-4 border-t border-gray-200 bg-gradient-to-r from-white to-gray-50 shadow-sm">
+          <form onSubmit={handleSendMessage} className="flex items-center space-x-2">
+            <FileUpload onFileSelect={handleFileUpload} />
+            
+            <div className="flex-1 relative">
+              <input
+                type="text"
+                value={newMessage}
+                onChange={(e) => handleTyping(e.target.value)}
+                placeholder="Message..."
+                className="w-full px-4 py-3 border border-gray-300 rounded-full focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white shadow-sm transition-all"
+                disabled={sending}
+              />
+              <div className="absolute right-2 top-1/2 transform -translate-y-1/2">
+                <EmojiPicker onEmojiSelect={handleEmojiSelect} />
+              </div>
             </div>
-          </div>
-          
-          <button
-            type="submit"
-            disabled={!newMessage.trim() || sending}
-            className="p-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-full disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-md hover:shadow-lg hover-lift"
-          >
-            <Send className="w-5 h-5" />
-          </button>
-        </form>
-      </div>
+            
+            <button
+              type="submit"
+              disabled={!newMessage.trim() || sending}
+              className="p-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-full disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-md hover:shadow-lg hover-lift"
+            >
+              <Send className="w-5 h-5" />
+            </button>
+          </form>
+        </div>
+      )}
       
       {/* User Profile Modal */}
       {showUserProfile && (
