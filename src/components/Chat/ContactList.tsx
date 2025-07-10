@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { formatDistanceToNow } from 'date-fns';
-import { Circle, User } from 'lucide-react';
+import { Circle, User, Users } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { supabase } from '../../lib/supabase';
 import UserProfileModal from '../Profile/UserProfileModal';
