@@ -197,7 +197,7 @@ body {
 }
 
 .scrollbar-thin::-webkit-scrollbar {
-  width: 6px;
+  width: 4px;
 }
 
 .scrollbar-thin::-webkit-scrollbar-track {
@@ -206,11 +206,33 @@ body {
 
 .scrollbar-thin::-webkit-scrollbar-thumb {
   background: rgba(156, 163, 175, 0.5);
-  border-radius: 3px;
+  border-radius: 2px;
 }
 
 .scrollbar-thin::-webkit-scrollbar-thumb:hover {
   background: rgba(156, 163, 175, 0.7);
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 2px;
+  }
+  
+  /* Improve touch targets on mobile */
+  button {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Optimize text sizes for mobile */
+  .text-xs {
+    font-size: 0.75rem;
+  }
+  
+  .text-sm {
+    font-size: 0.875rem;
+  }
 }
 
 /* Professional input styles */
